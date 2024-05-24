@@ -5,7 +5,7 @@
 
 const UCHAR name_w = 21;
 
-void input( FILE *f, day *d, price_list *p )
+void input( FILE *f, storage *d, price_list *p )
 {
    if ( fopen_s( &f, "in.txt", "r" ) )
    {
@@ -26,7 +26,7 @@ void input( FILE *f, day *d, price_list *p )
    }
 
    // Sort mod 0 - QUICK, 1 - TREE, 2 - SHELL;
-   fscanf_s( f, "%d", &d->srchm );
+   fscanf_s( f, "%d", &d->srtm );
 
    for ( ; !feof( f ); )
    {
@@ -38,23 +38,24 @@ void input( FILE *f, day *d, price_list *p )
 
       UCHAR i = 0;
       d->Search( key, &i ) ? d->res[i]->cnt += cnt :
-         d->Add( new resault( key, name, cnt ), i );
+         d->Add( new product( key, name, cnt ) );
    }
+
    std::cout << p->n << d->n;
 
 }
 
-void output( FILE *f, day *t )
+void output( FILE *f, storage *t )
 {
    setlocale( 0, "" );
    fopen_s( &f, "out.txt", "w" );
 
    fprintf_s( f, "Таблица, отсортированная %s с помощью %s поиска: \n\n%-8s \t %-20s \t %s",
       t->srtm ? t->srtm - 1 ? "методом Шелла" : "с использованием структуры дерева" : "методом Qsort",
-      t->srchm ? "бинарного" : "последовательного", "АРТИКУЛ", "НАИМЕНОВАНИЕ", "КОЛ-ВО" );
+      /*t->srchm ?*/ "бинарного" /*: "последовательного"*/, "АРТИКУЛ", "НАИМЕНОВАНИЕ", "КОЛ-ВО" );
    for ( UINT i = 0; i < t->n ; i++ )
    {
-      resault *b = t->res[i];
+      product *b = t->res[i];
       fprintf_s( f, "\n%08X \t %-20s \t %6hhu", b->key, b->name, b->cnt );
    }
 }
@@ -62,12 +63,10 @@ void output( FILE *f, day *t )
 int main( )
 {
    FILE *f = NULL;
-   day *resaults = new day, *products = new day;
-   price_list *prices = new price_list;
-   input( f, resaults, prices );
-   //t->Sort( );
-   //products_create( ... );
-   output( f, products );
+   storage *s = new storage;
+   price_list *p = new price_list;
+   input( f, s, p );
+   output( f, s );
 
    return 0;
 }

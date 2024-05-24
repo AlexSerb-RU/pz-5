@@ -25,7 +25,7 @@ struct price_list
    UCHAR Search( UINT key )
    {
       if ( IsEmpty( ) ) return 0;
-      UCHAR m = 0, l = 0, r = n - 1;
+      UCHAR l = 0, r = n - 1, m = (l + r) / 2;
       switch ( srchm )
       {
          case BINARY:
@@ -49,22 +49,22 @@ struct price_list
    }
 };
 
-struct resault
+struct product
 {
    UINT key;
    const char *name;
-   UCHAR cnt;
+   UCHAR cnt, cost;
 
-   resault( UINT _key = 0, const char *_name = "", UCHAR _cnt = 0 ) :
-      key( _key ), name( _name ), cnt( _cnt ) {}
+   product( UINT _key = 0, const char *_name = "", UCHAR _cnt = 0, UCHAR _cost = 0 ) :
+      key( _key ), name( _name ), cnt( _cnt ), cost( _cost ) { }
 };
 
-struct day
+struct storage
 {
    UCHAR n = 0;
    sortmode srtm = QUICK; // sort mode
-   searchmode srchm = LINEAR; // search mode
-   resault *res[N]{ };
+   //searchmode srchm = BINARY; // search mode
+   product *res[N]{ };
 
    inline bool IsFull( ) { return N == n; }
    inline bool IsEmpty( ) { return !n; }
@@ -72,24 +72,26 @@ struct day
    bool Search( UINT key, UCHAR *i )
    {
       if ( IsEmpty( ) ) return false;
-      UCHAR m = 0, l = 0, r = n - 1;
-      switch ( srchm )
+      /*switch ( srchm )
       {
          case BINARY:
-            /*m = (l + r) / 2;
-            for ( UCHAR b = 0 ; b + 1 < n || res[b]->key == key; ++b )
-               m = b;*/
+            for ( ; l < r && key != res[m]->key; m = (l + r) / 2 )
+               key >= res[m]->key ? l = m + 1 : r = m;
             break;
          case LINEAR:
-            for ( UCHAR b = 0 ; b + 1 < n && res[b]->key != key; ++b )
-               m = b + 1;
-      }
-      *i = m + (res[m]->key < key);
+            for ( UCHAR b = 0 ; b < n && res[b]->key < key; ++b )
+               m = b;
+      }*/
 
-      return res[m]->key == key;
+      // Интересная идея попытаться использовать бинарный поиск в неупорядоченной таблице, что могло пойти не так...
+      /*UCHAR l = 0, r = n - 1, m = (l + r) / 2;
+      for ( ; l < r && key != res[m]->key; m = (l + r) / 2 )
+         key >= res[m]->key ? l = m + 1: r = m;
+      *i = m + (res[m]->key < key);
+      return key == res[m]->key;*/
    }
 
-   UCHAR Add( resault *r, UCHAR ind )
+   UCHAR Add( product *r )
    {
       if ( IsFull( ) ) return 0;
       res[n] = r;
