@@ -130,7 +130,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="table.h" />
+    <ClInclude Include="price_list.h" />
+    <ClInclude Include="product.h" />
+    <ClInclude Include="storage.h" />
     <ClInclude Include="tree.h" />
   </ItemGroup>
   <ItemGroup>

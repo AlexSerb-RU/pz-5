@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <locale.h>
-#include "table.h"
+#include "storage.h"
+#include "price_list.h"
+#include "tree.h"
+
 #include <iostream>
 
 const UCHAR name_w = 21;
@@ -40,9 +43,6 @@ void input( FILE *f, storage *d, price_list *p )
       d->Search( key, &i ) ? d->res[i]->cnt += cnt :
          d->Add( new product( key, name, cnt ) );
    }
-
-   std::cout << p->n << d->n;
-
 }
 
 void output( FILE *f, storage *t )
@@ -62,6 +62,28 @@ void output( FILE *f, storage *t )
 
 int main( )
 {
+   tree t( 5 );
+   storage *v = new storage;
+   /*InsertTree( &t, 2 );
+   InsertTree( &t, 1 );
+   InsertTree( &t, 3 );*/
+   /*t.Add( 2 );
+   t.Add( 1 );
+   t.Add( 3 );
+   t.Add( 4 );
+   t.Add( 6 );*/
+   v->Add( new product( 5 ) );
+   v->Add( new product( 2 ) );
+   v->Add( new product( 3 ) );
+   v->Add( new product( 1 ) );
+   v->Add( new product( 7 ) );
+   v->Add( new product( 6 ) );
+
+   v->Sort( );
+   std::cout << v->n;
+   //WriteToTable( &t, v );
+   //t.Search( 4, b );
+
    FILE *f = NULL;
    storage *s = new storage;
    price_list *p = new price_list;
